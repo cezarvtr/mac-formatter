@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Serviços</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<!-- Ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ESQUERDA -->
+    <div class="left card">
+        <h1>Serviços</h1>
+
+        <form method="post">
+            <input name="mac" placeholder="MAC Address">
+            <input type="hidden" name="tipo" value="mac">
+            <button>
+                <i class="fa fa-ethernet"></i> Converter MAC
+            </button>
+        </form>
+
+        <form method="post">
+            <input name="ip" placeholder="IP/CIDR">
+            <input type="hidden" name="tipo" value="ip">
+            <button>
+                <i class="fa fa-network-wired"></i> Calcular IP
+            </button>
+        </form>
+    </div>
+
+    <!-- DIREITA -->
+    <div class="right card">
+
+        {% if resultado %}
+        <div class="result">
+
+            {% if resultado.macs %}
+                <h3>MAC Convertido</h3>
+
+                {% for m in resultado.macs %}
+                <div class="mac-line">
+                    <span class="mac-text">{{ m }}</span>
+                    <button class="copy-btn" onclick="copiarTexto('{{ m }}')">
+                        <i class="fa fa-copy"></i>
+                    </button>
+                </div>
+                {% endfor %}
+
+            {% elif resultado.network %}
+                <h3>Informações da Rede</h3>
+
+                <div class="line"><span>Network:</span><span>{{ resultado.network }}</span></div>
+                <div class="line"><span>Broadcast:</span><span>{{ resultado.broadcast }}</span></div>
+                <div class="line"><span>Máscara:</span><span>{{ resultado.mask }}</span></div>
+                <div class="line"><span>Wildcard:</span><span>{{ resultado.wildcard }}</span></div>
+                <div class="line"><span>CIDR:</span><span>/{{ resultado.cidr }}</span></div>
+
+                <br>
+
+                <div class="line"><span>HostMin:</span><span>{{ resultado.hostmin }}</span></div>
+                <div class="line"><span>HostMax:</span><span>{{ resultado.hostmax }}</span></div>
+
+                <br>
+
+                <div class="line"><span>Hosts:</span><span>{{ resultado.hosts }}</span></div>
+
+            {% else %}
+                <div style="color:red; font-weight:bold;">
+                    {{ resultado }}
+                </div>
+            {% endif %}
+
+        </div>
+        {% else %}
+            <div style="color:#94a3b8;">Resultado aqui...</div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast">Copiado!</div>
+
+<!-- SCRIPT -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<div class="footer">
+    Desenvolvido por Alysson Cordeiro 🏃‍♂️
+</div>
+
+</body>
+</html>
